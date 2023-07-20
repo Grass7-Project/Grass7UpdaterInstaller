@@ -71,7 +71,7 @@ int nShowCmd)
 	if(gr7::dirExists(bufferp) != 1) {
 		PROCESS_INFORMATION processInfo;
 		STARTUPINFO info={sizeof(info)};
-		if ( CreateProcess(NULL, gr7::convertchar(("X:\\sources\\recovery\\recenv.exe")), NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+		if ( CreateProcess(NULL, (LPWSTR)L"\"X:\\sources\\recovery\\recenv.exe\"", NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
 		{
 			WaitForSingleObject(processInfo.hProcess, INFINITE);
 			CloseHandle(processInfo.hProcess);
