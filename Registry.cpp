@@ -5,91 +5,107 @@
 #include "FileManagement.h"
 
 const char *driveletter = Getgr7DriveLetter();
-const wchar_t *lpSystemKey = _T("gr7System");
-const wchar_t *lpSoftwareKey = _T("gr7Software");
-const wchar_t *lpDefaultKey = _T("gr7Default");
-const wchar_t *lpSystemUserKey = _T("gr7SystemUser");
+const wchar_t *lpSystemKey = L"gr7System";
+const wchar_t *lpSoftwareKey = L"gr7Software";
+const wchar_t *lpDefaultKey = L"gr7Default";
+const wchar_t *lpSystemUserKey = L"gr7SystemUser";
 
 LONG loadSystemHive()
 {
-	const char *HiveFile = "Windows\\System32\\config\\SYSTEM";
-	char hivepath[MAX_PATH];
-	strncpy_s(hivepath, driveletter, sizeof(hivepath));
-	strncat_s(hivepath, HiveFile, sizeof(hivepath));
-	LPCWSTR lpSysHiveFile = gr7::convertchartoLPCWSTR(hivepath);
-	memset(hivepath, 0, sizeof(hivepath));
+	wchar_t *HiveFile = L"Windows\\System32\\config\\SYSTEM";
+	wchar_t lpSysHiveFile[MAX_PATH] = { 0 };
+	wcsncpy_s(lpSysHiveFile, gr7::convertchar(driveletter), sizeof(lpSysHiveFile));
+	wcsncat_s(lpSysHiveFile, HiveFile, sizeof(lpSysHiveFile));
 	LONG   hSystemKey;
-	hSystemKey = RegLoadKey(HKEY_LOCAL_MACHINE,lpSystemKey,lpSysHiveFile);
+	hSystemKey = RegLoadKeyW(HKEY_LOCAL_MACHINE,lpSystemKey,lpSysHiveFile);
+	memset(lpSysHiveFile, 0, sizeof(lpSysHiveFile));
 	return hSystemKey;
 }
 
 LONG loadSoftwareHive()
 {
 #ifdef _DEBUG
-	const char *HiveFile = "FF1\\SOFTWARE";
+	wchar_t *HiveFile = L"FF1\\SOFTWARE";
 #else
-	const char *HiveFile = "Windows\\System32\\config\\SOFTWARE";
+	wchar_t *HiveFile = L"Windows\\System32\\config\\SOFTWARE";
 #endif
-	char hivepath[MAX_PATH];
-	strncpy_s(hivepath, driveletter, sizeof(hivepath));
-	strncat_s(hivepath, HiveFile, sizeof(hivepath));
-	LPCWSTR lpSoftwareHiveFile = gr7::convertchartoLPCWSTR(hivepath);
-	memset(hivepath, 0, sizeof(hivepath));
+	wchar_t lpSoftwareHiveFile[MAX_PATH] = { 0 };
+	wcsncpy_s(lpSoftwareHiveFile, gr7::convertchar(driveletter), sizeof(lpSoftwareHiveFile));
+	wcsncat_s(lpSoftwareHiveFile, HiveFile, sizeof(lpSoftwareHiveFile));
 	LONG   hSoftwareKey;
-	hSoftwareKey = RegLoadKey(HKEY_LOCAL_MACHINE,lpSoftwareKey,lpSoftwareHiveFile);
+	hSoftwareKey = RegLoadKeyW(HKEY_LOCAL_MACHINE,lpSoftwareKey,lpSoftwareHiveFile);
+	memset(lpSoftwareHiveFile, 0, sizeof(lpSoftwareHiveFile));
 	return hSoftwareKey;
 }
 
 LONG loadDefaultHive()
 {
-	const char *HiveFile = "Windows\\System32\\config\\DEFAULT";
-	char hivepath[MAX_PATH];
-	strncpy_s(hivepath, driveletter, sizeof(hivepath));
-	strncat_s(hivepath, HiveFile, sizeof(hivepath));
-	LPCWSTR lpDefaultHiveFile = gr7::convertchartoLPCWSTR(hivepath);
-	memset(hivepath, 0, sizeof(hivepath));
+	wchar_t *HiveFile = L"Windows\\System32\\config\\DEFAULT";
+	wchar_t lpDefaultHiveFile[MAX_PATH] = { 0 };
+	wcsncpy_s(lpDefaultHiveFile, gr7::convertchar(driveletter), sizeof(lpDefaultHiveFile));
+	wcsncat_s(lpDefaultHiveFile, HiveFile, sizeof(lpDefaultHiveFile));
 	LONG   hDefaultKey;
-	hDefaultKey = RegLoadKey(HKEY_LOCAL_MACHINE,lpDefaultKey,lpDefaultHiveFile);
+	hDefaultKey = RegLoadKeyW(HKEY_LOCAL_MACHINE,lpDefaultKey,lpDefaultHiveFile);
+	memset(lpDefaultHiveFile, 0, sizeof(lpDefaultHiveFile));
 	return hDefaultKey;
 }
 
 LONG loadSystemUserHive()
 {
-	const char *HiveFile = "Windows\\System32\\config\\systemprofile\\ntuser.dat";
-	char hivepath[MAX_PATH];
-	strncpy_s(hivepath, driveletter, sizeof(hivepath));
-	strncat_s(hivepath, HiveFile, sizeof(hivepath));
-	LPCWSTR lpSystemUserHiveFile = gr7::convertchartoLPCWSTR(hivepath);
-	memset(hivepath, 0, sizeof(hivepath));
+	wchar_t *HiveFile = L"Windows\\System32\\config\\systemprofile\\ntuser.dat";
+	wchar_t lpSystemUserHiveFile[MAX_PATH] = { 0 };
+	wcsncpy_s(lpSystemUserHiveFile, gr7::convertchar(driveletter), sizeof(lpSystemUserHiveFile));
+	wcsncat_s(lpSystemUserHiveFile, HiveFile, sizeof(lpSystemUserHiveFile));
 	LONG   hSystemUserKey;
-	hSystemUserKey = RegLoadKey(HKEY_LOCAL_MACHINE,lpSystemUserKey,lpSystemUserHiveFile);
+	hSystemUserKey = RegLoadKeyW(HKEY_LOCAL_MACHINE,lpSystemUserKey,lpSystemUserHiveFile);
+	memset(lpSystemUserHiveFile, 0, sizeof(lpSystemUserHiveFile));
 	return hSystemUserKey;
 }
 
 bool unloadSystemHive()
 {
 	bool err;
-	err = (RegUnLoadKey(HKEY_LOCAL_MACHINE,lpSystemKey) != 0);
+	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE,lpSystemKey) != 0);
 	return err;
 }
 
 bool unloadSoftwareHive()
 {
 	bool err;
-	err = (RegUnLoadKey(HKEY_LOCAL_MACHINE,lpSoftwareKey) != 0);
+	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE,lpSoftwareKey) != 0);
 	return err;
 }
 
 bool unloadDefaultHive()
 {
 	bool err;
-	err = (RegUnLoadKey(HKEY_LOCAL_MACHINE,lpDefaultKey) != 0);
+	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE,lpDefaultKey) != 0);
 	return err;
 }
 
 bool unloadSystemUserHive()
 {
 	bool err;
-	err = (RegUnLoadKey(HKEY_LOCAL_MACHINE,lpSystemUserKey) != 0);
+	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE,lpSystemUserKey) != 0);
 	return err;
+}
+
+bool SetPermanentEnvironmentVariable(LPCTSTR value, LPCTSTR data)
+{
+	HKEY hKey;
+	LPCTSTR keyPath = L"System\\CurrentControlSet\\Control\\Session Manager\\Environment";
+	LSTATUS lOpenStatus = RegOpenKeyExW(HKEY_LOCAL_MACHINE, keyPath, 0, KEY_ALL_ACCESS, &hKey);
+	if (lOpenStatus == ERROR_SUCCESS)
+	{
+		LSTATUS lSetStatus = RegSetValueExW(hKey, value, 0, REG_SZ, (LPBYTE)data, (DWORD)wcslen(data) + 1);
+		RegCloseKey(hKey);
+
+		if (lSetStatus == ERROR_SUCCESS)
+		{
+			SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment", SMTO_BLOCK, 100, NULL);
+			return true;
+		}
+	}
+
+	return false;
 }
