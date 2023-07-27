@@ -89,23 +89,3 @@ bool unloadSystemUserHive()
 	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE,lpSystemUserKey) != 0);
 	return err;
 }
-
-bool SetPermanentEnvironmentVariable(LPCTSTR value, LPCTSTR data)
-{
-	HKEY hKey;
-	LPCTSTR keyPath = L"System\\CurrentControlSet\\Control\\Session Manager\\Environment";
-	LSTATUS lOpenStatus = RegOpenKeyExW(HKEY_LOCAL_MACHINE, keyPath, 0, KEY_ALL_ACCESS, &hKey);
-	if (lOpenStatus == ERROR_SUCCESS)
-	{
-		LSTATUS lSetStatus = RegSetValueExW(hKey, value, 0, REG_SZ, (LPBYTE)data, (DWORD)wcslen(data) + 1);
-		RegCloseKey(hKey);
-
-		if (lSetStatus == ERROR_SUCCESS)
-		{
-			SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment", SMTO_BLOCK, 100, NULL);
-			return true;
-		}
-	}
-
-	return false;
-}
