@@ -7,5 +7,3 @@ bool unloadSystemHive();
 bool unloadSoftwareHive();
 bool unloadDefaultHive();
 bool unloadSystemUserHive();
-
-bool SetPermanentEnvironmentVariable(LPCTSTR value, LPCTSTR data);
