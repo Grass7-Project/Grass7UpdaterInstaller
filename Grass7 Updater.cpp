@@ -1,16 +1,17 @@
 // winRE part of the Grass7 Updater
 
 #include "stdafx.h"
+#include "Global.h"
 #include "Registry.h"
 #include "FileManagement.h"
 #include "MainCode.h"
 #include "GUIDraw.h"
+#include "Global.h"
 #include <sdkddkver.h>
 #include <vector>
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
+GlobalMain MainObjects;
+GlobalAppResStrings AppResStringsObjects;
 
 TCHAR wcs[256];
 
@@ -22,7 +23,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				PAINTSTRUCT ps;
 				HDC hdc = BeginPaint(hWnd, &ps);
-				DrawValues(hdc, wcs);
+				GUIDrawClass::DrawValues(hdc, wcs);
 				EndPaint(hWnd, &ps);
 			}
 			break;
@@ -40,20 +41,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
+	MainObjects.hInst = hInstance;
+	GUIDrawClass::LoadStrings();
     if (!SUCCEEDED(gr7::ModifyPrivilege(SE_RESTORE_NAME, TRUE, GetCurrentProcess()))) {
-        MessageBox(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_PRIVILAGE_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONERROR);
+        MessageBox(NULL, AppResStringsObjects.PrivilageError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
     if (!SUCCEEDED(gr7::ModifyPrivilege(SE_BACKUP_NAME, TRUE, GetCurrentProcess()))) {
-        MessageBox(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_PRIVILAGE_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONERROR);
+        MessageBox(NULL, AppResStringsObjects.PrivilageError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
 	//Get drive letter of the Grass7 install to apply the update to.
-	const char *driveletter = Getgr7DriveLetter();
+	const char *driveletter = FileManagementClass::Getgr7DriveLetter();
 	if(driveletter == "") {
-		MessageBox(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_NOT_INSTALLED), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONERROR);
+		MessageBox(NULL, AppResStringsObjects.NotInstalled, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 	char bufferp[256] = { 0 };
@@ -105,7 +108,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	HWND hWnd = ::CreateWindowExW(
 		0,
 		L"GRASS7UPDATER",
-		gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME),
+		AppResStringsObjects.OSName,
 		WS_OVERLAPPED | WS_CAPTION,
 		0,
 		0,
@@ -135,12 +138,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		hInstance,
 		NULL);
 
-	wcsncat_s(wcs, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_INSTALLING), 256);
+	wcsncat_s(wcs, AppResStringsObjects.Installing, 256);
 	wcsncat_s(wcs, L"0%", 256);
 	::SendMessageW(hSmoothProgressCtrl, PBM_SETPOS, (WPARAM)(INT)0, 0);
 	::ShowWindow(hWnd, SW_SHOWDEFAULT);
 	::UpdateWindow(hWnd);
-	mainCode(hSmoothProgressCtrl, hWnd, wcs);
+	MainCodeClass::mainCode(hSmoothProgressCtrl, hWnd, wcs);
 
 	MSG msg;
 	while (::GetMessageW(&msg, hWnd, 0, 0) > 0)

@@ -1,9 +1,18 @@
-LONG loadSystemHive();
-LONG loadSoftwareHive();
-LONG loadDefaultHive();
-LONG loadSystemUserHive();
+class RegistryClass {
+public:
+	static LONG loadSystemHive();
+	static LONG loadSoftwareHive();
+	static LONG loadDefaultHive();
+	static LONG loadSystemUserHive();
 
-bool unloadSystemHive();
-bool unloadSoftwareHive();
-bool unloadDefaultHive();
-bool unloadSystemUserHive();
+	static bool unloadSystemHive();
+	static bool unloadSoftwareHive();
+	static bool unloadDefaultHive();
+	static bool unloadSystemUserHive();
+private:
+	const char *driveletter;
+	const wchar_t *lpSystemKey;
+	const wchar_t *lpSoftwareKey;
+	const wchar_t *lpDefaultKey;
+	const wchar_t *lpSystemUserKey;
+};

@@ -2,11 +2,10 @@
 
 #include "stdafx.h"
 #include "FileManagement.h"
+#include "Global.h"
 #include <io.h>
 
-struct stat info;
-
-const char *Getgr7DriveLetter()
+const char *FileManagementClass::Getgr7DriveLetter()
 {
 	const char *driveletter;
 	std::fstream fileStream;

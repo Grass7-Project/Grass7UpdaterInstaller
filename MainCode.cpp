@@ -1,17 +1,18 @@
 // The actual updater code
 
 #include "stdafx.h"
+#include "Global.h"
 #include "Registry.h"
 #include "FileManagement.h"
 #include "MainCode.h"
 #include "GUIDraw.h"
 
-int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
+int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 {
 	Sleep(2000);
-	const char *driveletter = Getgr7DriveLetter();
+	const char *driveletter = FileManagementClass::Getgr7DriveLetter();
 	if(driveletter == "") {
-		MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_NOT_INSTALLED), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, AppResStringsObjects.NotInstalled, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 	wchar_t tempfolder[16] = { 0 };
@@ -20,7 +21,7 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 	int percentageCounter = 0;
 	SetCurrentDirectoryW(tempfolder);
 	percentageCounter = percentageCounter + 10;
-	updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
+	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	// We load and parse the config file
 	// We have to do a diarrhea way of doing this, not proud of this one, there is likely a better way but i was very angry at the time that it didnt work so i went with this.
@@ -76,7 +77,7 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 	std::string lineSystemUserReg;
 
 	percentageCounter = percentageCounter + 10;
-	updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
+	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	getline(ifs, lineUpdateID);
 	if (regex_search(lineUpdateID, updateids)) {
@@ -225,8 +226,8 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 
 	// Registry related stuff.
 
-	if (loadSoftwareHive() != ERROR_SUCCESS) {
-		MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_SOFT_HIVE_LOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONERROR);
+	if (RegistryClass::loadSoftwareHive() != ERROR_SUCCESS) {
+		MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
@@ -235,7 +236,7 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 	LONG lResult1 = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"gr7Software\\Grass7\\CurrentVersion", 0, KEY_WRITE, &hkey1d);
 	if (lResult1 != ERROR_SUCCESS)
 	{
-		MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_FAIL_OPEN_KEY), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, AppResStringsObjects.FailToOpenRegistryKey, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		linenewUpdateLevel.clear();
 		linenewPatchLevel.clear();
 		linenewBuildString.clear();
@@ -267,27 +268,27 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 	linenewBuildString.clear();
 
 	if (loadgr7SysHive == 1) {
-		if (loadSystemHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_SYS_HIVE_LOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONERROR);
+		if (RegistryClass::loadSystemHive() != ERROR_SUCCESS) {
+			MessageBoxW(NULL, AppResStringsObjects.SystemHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
 	if (loadgr7DefaultHive == 1) {
-		if (loadDefaultHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_DEF_HIVE_LOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONERROR);
+		if (RegistryClass::loadDefaultHive() != ERROR_SUCCESS) {
+			MessageBoxW(NULL, AppResStringsObjects.DefaultUserHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
 	if (loadgr7SystemUserHive == 1) {
-		if (loadSystemUserHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_SYS_USR_HIVE_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONERROR);
+		if (RegistryClass::loadSystemUserHive() != ERROR_SUCCESS) {
+			MessageBoxW(NULL, AppResStringsObjects.SystemUserHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
 
 	if (UnloadSoftRegOnCmd == 1) {
-		if (unloadSoftwareHive() != 0) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_SOFT_HIVE_UNLOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONWARNING);
+		if (RegistryClass::unloadSoftwareHive() != 0) {
+			MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
 		}
 	}
 
@@ -320,8 +321,8 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 	}
 
 	if (UnloadSoftRegOnCmd == 1) {
-		if (loadSoftwareHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_SOFT_HIVE_LOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONERROR);
+		if (RegistryClass::loadSoftwareHive() != ERROR_SUCCESS) {
+			MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
@@ -370,22 +371,22 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 			memset(dr1, 0, sizeof(dr1));
 			if(percentageCounter != 40) {
 				percentageCounter = percentageCounter + 1;
-				updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
+				GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 			}
 		}
 		file.close();
 		line.clear();
 	}
 	else { 
-		MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_FILE_LIST_ACCESS_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, AppResStringsObjects.UpdateFileListAccessError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
 	percentageCounter = percentageCounter + 20;
-	updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
+	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	percentageCounter = percentageCounter + 20;
-	updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
+	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	wchar_t bufferreg[256] = { 0 };
 	wchar_t bufferfile1[31] = { 0 };
@@ -417,27 +418,27 @@ int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 	memset(bufferreg, 0, sizeof(bufferreg));
 
 	if(loadgr7SysHive == 1) {
-		if(unloadSystemHive() != 0) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_SYS_HIVE_UNLOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONWARNING);
+		if(RegistryClass::unloadSystemHive() != 0) {
+			MessageBoxW(NULL, AppResStringsObjects.SystemHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
 		}
 	}
 	if(loadgr7DefaultHive == 1) {
-		if(unloadDefaultHive() != 0) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_DEF_HIVE_UNLOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONWARNING);
+		if(RegistryClass::unloadDefaultHive() != 0) {
+			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_DEF_HIVE_UNLOAD_ERROR), AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
 		}
 	}
 	if(loadgr7SystemUserHive == 1) {
-		if(unloadSystemUserHive() != 0) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_SYS_USR_HIVE_UNLOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_OSNAME), MB_OK | MB_ICONWARNING);
+		if(RegistryClass::unloadSystemUserHive() != 0) {
+			MessageBoxW(NULL, AppResStringsObjects.SystemUserHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
 		}
 	}
 
-	if (unloadSoftwareHive() != 0) {
-		MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_SOFT_HIVE_UNLOAD_ERROR), gr7::LoadStringToW(GetModuleHandleW(NULL), IDS_OSNAME), MB_OK | MB_ICONWARNING);
+	if (RegistryClass::unloadSoftwareHive() != 0) {
+		MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
 	}
 
 	percentageCounter = 100;
-	updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
+	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	// We clean our mess up.
 	wchar_t bufferpg[20] = { 0 };
