@@ -15,6 +15,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		MessageBoxW(NULL, AppResStringsObjects.NotInstalled, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
 		exit(0);
 	}
+	RegistryClass::Init();
 	wchar_t tempfolder[16] = { 0 };
 	wcsncpy_s(tempfolder, gr7::convertchar(driveletter), sizeof(tempfolder));
 	wcsncat_s(tempfolder, L"gr7updatefld", sizeof(tempfolder));

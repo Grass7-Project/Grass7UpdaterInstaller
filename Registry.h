@@ -1,5 +1,6 @@
 class RegistryClass {
 public:
+	static void Init();
 	static LONG loadSystemHive();
 	static LONG loadSoftwareHive();
 	static LONG loadDefaultHive();

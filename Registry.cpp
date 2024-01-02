@@ -7,14 +7,17 @@
 
 RegistryClass RegistryObjects;
 
-LONG RegistryClass::loadSystemHive()
+void RegistryClass::Init()
 {
 	RegistryObjects.driveletter = FileManagementClass::Getgr7DriveLetter();
 	RegistryObjects.lpSystemKey = L"gr7System";
 	RegistryObjects.lpSoftwareKey = L"gr7Software";
 	RegistryObjects.lpDefaultKey = L"gr7Default";
 	RegistryObjects.lpSystemUserKey = L"gr7SystemUser";
+}
 
+LONG RegistryClass::loadSystemHive()
+{
 	wchar_t *HiveFile = L"Windows\\System32\\config\\SYSTEM";
 	wchar_t lpSysHiveFile[MAX_PATH] = { 0 };
 	wcsncpy_s(lpSysHiveFile, gr7::convertchar(RegistryObjects.driveletter), sizeof(lpSysHiveFile));
