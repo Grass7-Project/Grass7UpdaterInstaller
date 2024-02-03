@@ -199,7 +199,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Icon.ico" />
-    <None Include="ReadMe.txt" />
+    <None Include="LICENSE" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManagement.h" />
