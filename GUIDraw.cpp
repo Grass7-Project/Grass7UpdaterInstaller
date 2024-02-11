@@ -31,25 +31,8 @@ void GUIDrawClass::updateProgressBar(int percentageCounter, HWND hProgressBar, H
 	wcsncat_s(percantage, L"%", 5);
 	::SendMessageW(hProgressBar, PBM_SETPOS, (WPARAM)(INT)percentageCounter, 0);
 	wcscpy_s(ProgressText, hProgressText);
-	wcsncat_s(ProgressText, AppResStringsObjects.Installing, 24);
+	wcsncat_s(ProgressText, AppResStringsObjects.Installing.c_str(), 24);
 	wcsncat_s(ProgressText, percantage, 256);
 	OnSomeActionToRefreshValues(hWnd, ProgressText);
 	::UpdateWindow(hWnd);
-}
-
-void GUIDrawClass::LoadStrings()
-{
-	AppResStringsObjects.OSName = gr7::LoadStringToW(MainObjects.hInst, IDS_OSNAME);
-	AppResStringsObjects.PrivilageError = gr7::LoadStringToW(MainObjects.hInst, IDS_PRIVILAGE_ERROR);
-	AppResStringsObjects.NotInstalled = gr7::LoadStringToW(MainObjects.hInst, IDS_NOT_INSTALLED);
-	AppResStringsObjects.Installing = gr7::LoadStringToW(MainObjects.hInst, IDS_INSTALLING);
-	AppResStringsObjects.SoftwareHiveLoadError = gr7::LoadStringToW(MainObjects.hInst, IDS_SOFT_HIVE_LOAD_ERROR);
-	AppResStringsObjects.SystemHiveLoadError = gr7::LoadStringToW(MainObjects.hInst, IDS_SYS_HIVE_LOAD_ERROR);
-	AppResStringsObjects.DefaultUserHiveLoadError = gr7::LoadStringToW(MainObjects.hInst, IDS_DEF_HIVE_LOAD_ERROR);
-	AppResStringsObjects.SystemUserHiveLoadError = gr7::LoadStringToW(MainObjects.hInst, IDS_SYS_USR_HIVE_ERROR);
-	AppResStringsObjects.SoftwareHiveUnloadError = gr7::LoadStringToW(MainObjects.hInst, IDS_SOFT_HIVE_UNLOAD_ERROR);
-	AppResStringsObjects.DefaultUserHiveUnloadError = gr7::LoadStringToW(MainObjects.hInst, IDS_DEF_HIVE_UNLOAD_ERROR);
-	AppResStringsObjects.SystemHiveUnloadError = gr7::LoadStringToW(MainObjects.hInst, IDS_SYS_HIVE_UNLOAD_ERROR);
-	AppResStringsObjects.UpdateFileListAccessError = gr7::LoadStringToW(MainObjects.hInst, IDS_FILE_LIST_ACCESS_ERROR);
-	AppResStringsObjects.FailToOpenRegistryKey = gr7::LoadStringToW(MainObjects.hInst, IDS_FAIL_OPEN_KEY);
 }

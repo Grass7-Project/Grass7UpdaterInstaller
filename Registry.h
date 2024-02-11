@@ -11,7 +11,6 @@ public:
 	static bool unloadDefaultHive();
 	static bool unloadSystemUserHive();
 private:
-	const char *driveletter;
 	const wchar_t *lpSystemKey;
 	const wchar_t *lpSoftwareKey;
 	const wchar_t *lpDefaultKey;

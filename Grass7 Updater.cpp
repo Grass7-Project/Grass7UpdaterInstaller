@@ -6,6 +6,7 @@
 #include "FileManagement.h"
 #include "MainCode.h"
 #include "GUIDraw.h"
+#include "ResourceLoader.h"
 #include "Global.h"
 #include <sdkddkver.h>
 #include <vector>
@@ -13,7 +14,7 @@
 GlobalMain MainObjects;
 GlobalAppResStrings AppResStringsObjects;
 
-TCHAR wcs[256];
+TCHAR wcs[MAX_PATH];
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -42,28 +43,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
 	MainObjects.hInst = hInstance;
-	GUIDrawClass::LoadStrings();
+	ResourceLoader::LoadStrings();
     if (!SUCCEEDED(gr7::ModifyPrivilege(SE_RESTORE_NAME, TRUE, GetCurrentProcess()))) {
-        MessageBox(NULL, AppResStringsObjects.PrivilageError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+        MessageBox(NULL, AppResStringsObjects.PrivilageError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
     if (!SUCCEEDED(gr7::ModifyPrivilege(SE_BACKUP_NAME, TRUE, GetCurrentProcess()))) {
-        MessageBox(NULL, AppResStringsObjects.PrivilageError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+        MessageBox(NULL, AppResStringsObjects.PrivilageError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
 	//Get drive letter of the Grass7 install to apply the update to.
-	const char *driveletter = FileManagementClass::Getgr7DriveLetter();
-	if(driveletter == "") {
-		MessageBox(NULL, AppResStringsObjects.NotInstalled, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+	MainObjects.driveletter = FileManagementClass::Getgr7DriveLetter();
+	MainObjects.driveletterW = FileManagementClass::Getgr7DriveLetterW();
+	if(MainObjects.driveletter == "") {
+		MessageBox(NULL, AppResStringsObjects.NotInstalled.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
-	char bufferp[256] = { 0 };
-	strncpy_s(bufferp, driveletter, sizeof(bufferp));
-	strncat_s(bufferp, "gr7updatefld", sizeof(bufferp));
 
-	if(gr7::dirExists(bufferp) != 1) {
+	std::wstring UpdateFilesFolder = MainObjects.driveletterW;
+	UpdateFilesFolder.append(L"gr7updatefld");
+
+	if(gr7::dirExists(UpdateFilesFolder.c_str()) != 1) {
 		PROCESS_INFORMATION processInfo;
 		STARTUPINFO info = { sizeof(info) };
 		if ( CreateProcessW(NULL, (LPWSTR)L"\"X:\\sources\\recovery\\recenv.exe\"", NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
@@ -72,10 +74,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 			CloseHandle(processInfo.hProcess);
 			CloseHandle(processInfo.hThread);
 		}
-		memset(bufferp, 0, sizeof(bufferp));
 		exit(0);
 	}
-	memset(bufferp, 0, sizeof(bufferp));
 
 	// Window shit
 
@@ -108,7 +108,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	HWND hWnd = ::CreateWindowExW(
 		0,
 		L"GRASS7UPDATER",
-		AppResStringsObjects.OSName,
+		AppResStringsObjects.OSName.c_str(),
 		WS_OVERLAPPED | WS_CAPTION,
 		0,
 		0,
@@ -138,8 +138,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		hInstance,
 		NULL);
 
-	wcsncat_s(wcs, AppResStringsObjects.Installing, 256);
-	wcsncat_s(wcs, L"0%", 256);
+	wcsncat_s(wcs, AppResStringsObjects.Installing.c_str(), sizeof(wcs));
+	wcsncat_s(wcs, L"0%", sizeof(wcs));
 	::SendMessageW(hSmoothProgressCtrl, PBM_SETPOS, (WPARAM)(INT)0, 0);
 	::ShowWindow(hWnd, SW_SHOWDEFAULT);
 	::UpdateWindow(hWnd);

@@ -10,14 +10,13 @@
 int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 {
 	Sleep(2000);
-	const char *driveletter = FileManagementClass::Getgr7DriveLetter();
-	if(driveletter == "") {
-		MessageBoxW(NULL, AppResStringsObjects.NotInstalled, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+	if(MainObjects.driveletter == "") {
+		MessageBoxW(NULL, AppResStringsObjects.NotInstalled.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 	RegistryClass::Init();
 	wchar_t tempfolder[16] = { 0 };
-	wcsncpy_s(tempfolder, gr7::convertchar(driveletter), sizeof(tempfolder));
+	wcsncpy_s(tempfolder, MainObjects.driveletterW, sizeof(tempfolder));
 	wcsncat_s(tempfolder, L"gr7updatefld", sizeof(tempfolder));
 	int percentageCounter = 0;
 	SetCurrentDirectoryW(tempfolder);
@@ -27,7 +26,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	// We load and parse the config file
 	// We have to do a diarrhea way of doing this, not proud of this one, there is likely a better way but i was very angry at the time that it didnt work so i went with this.
 	char bufferpf[28] = { 0 };
-	strncpy_s(bufferpf, driveletter, sizeof(bufferpf));
+	strncpy_s(bufferpf, MainObjects.driveletter, sizeof(bufferpf));
 	strncat_s(bufferpf, "gr7updatefld\\Update.conf", sizeof(bufferpf));
 	std::ifstream ifs(bufferpf);
 	memset(bufferpf, 0, sizeof(bufferpf));
@@ -228,7 +227,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	// Registry related stuff.
 
 	if (RegistryClass::loadSoftwareHive() != ERROR_SUCCESS) {
-		MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveLoadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
@@ -237,7 +236,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	LONG lResult1 = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"gr7Software\\Grass7\\CurrentVersion", 0, KEY_WRITE, &hkey1d);
 	if (lResult1 != ERROR_SUCCESS)
 	{
-		MessageBoxW(NULL, AppResStringsObjects.FailToOpenRegistryKey, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, AppResStringsObjects.FailToOpenRegistryKey.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		linenewUpdateLevel.clear();
 		linenewPatchLevel.clear();
 		linenewBuildString.clear();
@@ -270,32 +269,32 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	if (loadgr7SysHive == 1) {
 		if (RegistryClass::loadSystemHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, AppResStringsObjects.SystemHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+			MessageBoxW(NULL, AppResStringsObjects.SystemHiveLoadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
 	if (loadgr7DefaultHive == 1) {
 		if (RegistryClass::loadDefaultHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, AppResStringsObjects.DefaultUserHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+			MessageBoxW(NULL, AppResStringsObjects.DefaultUserHiveLoadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
 	if (loadgr7SystemUserHive == 1) {
 		if (RegistryClass::loadSystemUserHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, AppResStringsObjects.SystemUserHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+			MessageBoxW(NULL, AppResStringsObjects.SystemUserHiveLoadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
 
 	if (UnloadSoftRegOnCmd == 1) {
 		if (RegistryClass::unloadSoftwareHive() != 0) {
-			MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
+			MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveUnloadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONWARNING);
 		}
 	}
 
 	if (enableCmd == 1) {
 		wchar_t cmddlol[256] = { 0 };
-		wcsncpy_s(cmddlol, gr7::convertchar(driveletter), sizeof(cmddlol));
+		wcsncpy_s(cmddlol, MainObjects.driveletterW, sizeof(cmddlol));
 		wcsncat_s(cmddlol, L"gr7updatefld\\commands.bat", sizeof(cmddlol));
 
 		SHELLEXECUTEINFO ShExecInfo;
@@ -305,7 +304,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		ShExecInfo.lpVerb = L"open";
 		ShExecInfo.lpFile = cmddlol;
 		ShExecInfo.lpParameters = L"";
-		ShExecInfo.lpDirectory = gr7::convertchar(driveletter);
+		ShExecInfo.lpDirectory = MainObjects.driveletterW;
 
 		if (showCmd == 1) {
 			ShExecInfo.nShow = SW_SHOW;
@@ -323,7 +322,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	if (UnloadSoftRegOnCmd == 1) {
 		if (RegistryClass::loadSoftwareHive() != ERROR_SUCCESS) {
-			MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveLoadError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+			MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveLoadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 			exit(0);
 		}
 	}
@@ -332,13 +331,13 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	std::string line;
 	char updatefilecnf[33] = { 0 };
 
-	strncpy_s(updatefilecnf, driveletter, sizeof(updatefilecnf));
+	strncpy_s(updatefilecnf, MainObjects.driveletter, sizeof(updatefilecnf));
 	strncat_s(updatefilecnf, "gr7updatefld\\UpdateFiles.conf", sizeof(updatefilecnf));
 	std::ifstream file(updatefilecnf);
 	memset(updatefilecnf, 0, sizeof(updatefilecnf));
 	if (file.is_open()) {
 		while (getline(file, line)) {
-			dr1 = _strdup(driveletter);
+			dr1 = _strdup(MainObjects.driveletter);
 			std::string destination1 = line;
 			std::size_t pos = destination1.find(" - ");
 			if (pos != std::string::npos) {
@@ -379,7 +378,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		line.clear();
 	}
 	else { 
-		MessageBoxW(NULL, AppResStringsObjects.UpdateFileListAccessError, AppResStringsObjects.OSName, MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, AppResStringsObjects.UpdateFileListAccessError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
@@ -389,27 +388,26 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	percentageCounter = percentageCounter + 20;
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
-	wchar_t bufferreg[256] = { 0 };
-	wchar_t bufferfile1[31] = { 0 };
-	char bufferreg2[256] = { 0 };
+	wchar_t bufferreg[MAX_PATH] = { 0 };
 
 	wcsncpy_s(bufferreg, L"gr7Software\\Grass7\\CurrentVersion\\Updates\\", sizeof(bufferreg));
 	wcsncat_s(bufferreg, gr7::convertchar(lineUpdateID.c_str()), sizeof(bufferreg));
-	strncpy_s(bufferreg2, driveletter, sizeof(bufferreg2));
-	strncat_s(bufferreg2, "Windows\\Grass7Update\\", sizeof(bufferreg2));
-	if(gr7::dirExists(bufferreg2) != 1) {
-		CreateDirectoryW(gr7::convertchartoLPCWSTR(bufferreg2),NULL);
+
+	std::wstring UpdateFolder = MainObjects.driveletterW;
+	UpdateFolder.append(L"Windows\\Grass7Update\\");
+
+	if(gr7::dirExists(UpdateFolder.c_str()) != 1) {
+		CreateDirectoryW(UpdateFolder.c_str(),NULL);
 	}
-	strncat_s(bufferreg2, lineUpdateID.c_str(), sizeof(bufferreg2));
-	strncat_s(bufferreg2, ".txt", sizeof(bufferreg2));
-	wcsncpy_s(bufferfile1, gr7::convertchar(driveletter), sizeof(bufferfile1));
-	wcsncat_s(bufferfile1, L"gr7updatefld", sizeof(bufferfile1));
-	wcsncat_s(bufferfile1, L"\\", sizeof(bufferfile1));
-	wcsncat_s(bufferfile1, gr7::convertchar(lineUpdInfoFile.c_str()), sizeof(bufferfile1));
-	LPCTSTR data = gr7::convertchartoLPCWSTR(bufferreg2);
-	memset(bufferreg2, 0, sizeof(bufferreg2));
-	CopyFileW(bufferfile1,data,false);
-	memset(bufferfile1, 0, sizeof(bufferfile1));
+	UpdateFolder.append(gr7::convertchar(lineUpdateID.c_str()));
+	UpdateFolder.append(L".txt");
+
+	std::wstring BufferFile = MainObjects.driveletterW;
+	BufferFile.append(L"gr7updatefld\\");
+	BufferFile.append(gr7::convertchar(lineUpdInfoFile.c_str()));
+
+	LPCWSTR data = UpdateFolder.c_str();
+	CopyFileW(BufferFile.c_str(),data,false);
 	HKEY hkey;
 	lineUpdateID.clear();
 	if(RegCreateKeyExW(HKEY_LOCAL_MACHINE, bufferreg, 0, NULL, 0, KEY_WRITE, NULL, &hkey, NULL) == ERROR_SUCCESS) {
@@ -420,33 +418,32 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	if(loadgr7SysHive == 1) {
 		if(RegistryClass::unloadSystemHive() != 0) {
-			MessageBoxW(NULL, AppResStringsObjects.SystemHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
+			MessageBoxW(NULL, AppResStringsObjects.SystemHiveUnloadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONWARNING);
 		}
 	}
 	if(loadgr7DefaultHive == 1) {
 		if(RegistryClass::unloadDefaultHive() != 0) {
-			MessageBoxW(NULL, gr7::LoadStringToW(GetModuleHandleW(NULL),IDS_DEF_HIVE_UNLOAD_ERROR), AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
+			MessageBoxW(NULL, AppResStringsObjects.DefaultUserHiveLoadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONWARNING);
 		}
 	}
 	if(loadgr7SystemUserHive == 1) {
 		if(RegistryClass::unloadSystemUserHive() != 0) {
-			MessageBoxW(NULL, AppResStringsObjects.SystemUserHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
+			MessageBoxW(NULL, AppResStringsObjects.SystemUserHiveUnloadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONWARNING);
 		}
 	}
 
 	if (RegistryClass::unloadSoftwareHive() != 0) {
-		MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveUnloadError, AppResStringsObjects.OSName, MB_OK | MB_ICONWARNING);
+		MessageBoxW(NULL, AppResStringsObjects.SoftwareHiveUnloadError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONWARNING);
 	}
 
 	percentageCounter = 100;
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	// We clean our mess up.
-	wchar_t bufferpg[20] = { 0 };
-	wcsncpy_s(bufferpg, gr7::convertchar(driveletter), sizeof(bufferpg));
-	wcsncat_s(bufferpg, L"Windows\\System32", sizeof(bufferpg));
-	SetCurrentDirectoryW(bufferpg);
-	memset(bufferpg, 0, sizeof(bufferpg));
+	std::wstring system32dir = MainObjects.driveletterW;
+	system32dir.append(L"Windows\\System32");
+
+	SetCurrentDirectoryW(system32dir.c_str());
 	gr7::DeleteDirectory(tempfolder);
 	memset(tempfolder, 0, sizeof(tempfolder));
 	memset(hProgressText, 0, sizeof(hProgressText));

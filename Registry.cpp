@@ -9,7 +9,6 @@ RegistryClass RegistryObjects;
 
 void RegistryClass::Init()
 {
-	RegistryObjects.driveletter = FileManagementClass::Getgr7DriveLetter();
 	RegistryObjects.lpSystemKey = L"gr7System";
 	RegistryObjects.lpSoftwareKey = L"gr7Software";
 	RegistryObjects.lpDefaultKey = L"gr7Default";
@@ -20,7 +19,7 @@ LONG RegistryClass::loadSystemHive()
 {
 	wchar_t *HiveFile = L"Windows\\System32\\config\\SYSTEM";
 	wchar_t lpSysHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpSysHiveFile, gr7::convertchar(RegistryObjects.driveletter), sizeof(lpSysHiveFile));
+	wcsncpy_s(lpSysHiveFile, MainObjects.driveletterW, sizeof(lpSysHiveFile));
 	wcsncat_s(lpSysHiveFile, HiveFile, sizeof(lpSysHiveFile));
 	LONG   hSystemKey;
 	hSystemKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemKey,lpSysHiveFile);
@@ -36,7 +35,7 @@ LONG RegistryClass::loadSoftwareHive()
 	wchar_t *HiveFile = L"Windows\\System32\\config\\SOFTWARE";
 #endif
 	wchar_t lpSoftwareHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpSoftwareHiveFile, gr7::convertchar(RegistryObjects.driveletter), sizeof(lpSoftwareHiveFile));
+	wcsncpy_s(lpSoftwareHiveFile, MainObjects.driveletterW, sizeof(lpSoftwareHiveFile));
 	wcsncat_s(lpSoftwareHiveFile, HiveFile, sizeof(lpSoftwareHiveFile));
 	LONG   hSoftwareKey;
 	hSoftwareKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSoftwareKey,lpSoftwareHiveFile);
@@ -48,7 +47,7 @@ LONG RegistryClass::loadDefaultHive()
 {
 	wchar_t *HiveFile = L"Windows\\System32\\config\\DEFAULT";
 	wchar_t lpDefaultHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpDefaultHiveFile, gr7::convertchar(RegistryObjects.driveletter), sizeof(lpDefaultHiveFile));
+	wcsncpy_s(lpDefaultHiveFile, MainObjects.driveletterW, sizeof(lpDefaultHiveFile));
 	wcsncat_s(lpDefaultHiveFile, HiveFile, sizeof(lpDefaultHiveFile));
 	LONG   hDefaultKey;
 	hDefaultKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpDefaultKey,lpDefaultHiveFile);
@@ -60,7 +59,7 @@ LONG RegistryClass::loadSystemUserHive()
 {
 	wchar_t *HiveFile = L"Windows\\System32\\config\\systemprofile\\ntuser.dat";
 	wchar_t lpSystemUserHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpSystemUserHiveFile, gr7::convertchar(RegistryObjects.driveletter), sizeof(lpSystemUserHiveFile));
+	wcsncpy_s(lpSystemUserHiveFile, MainObjects.driveletterW, sizeof(lpSystemUserHiveFile));
 	wcsncat_s(lpSystemUserHiveFile, HiveFile, sizeof(lpSystemUserHiveFile));
 	LONG   hSystemUserKey;
 	hSystemUserKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemUserKey,lpSystemUserHiveFile);
