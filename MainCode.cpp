@@ -25,11 +25,9 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	// We load and parse the config file
 	// We have to do a diarrhea way of doing this, not proud of this one, there is likely a better way but i was very angry at the time that it didnt work so i went with this.
-	char bufferpf[28] = { 0 };
-	strncpy_s(bufferpf, MainObjects.driveletter, sizeof(bufferpf));
-	strncat_s(bufferpf, "gr7updatefld\\Update.conf", sizeof(bufferpf));
-	std::ifstream ifs(bufferpf);
-	memset(bufferpf, 0, sizeof(bufferpf));
+	std::wstring UpdateConfigFile = MainObjects.driveletterW;
+	UpdateConfigFile.append(L"gr7updatefld\\Update.conf");
+	std::ifstream ifs(UpdateConfigFile.c_str());
 
 	std::string updateID = "UpdateID=";
 	std::string arch = "arch=";
@@ -293,16 +291,15 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	}
 
 	if (enableCmd == 1) {
-		wchar_t cmddlol[256] = { 0 };
-		wcsncpy_s(cmddlol, MainObjects.driveletterW, sizeof(cmddlol));
-		wcsncat_s(cmddlol, L"gr7updatefld\\commands.bat", sizeof(cmddlol));
+		std::wstring cmddlol = MainObjects.driveletterW;
+		cmddlol.append(L"gr7updatefld\\commands.bat");
 
 		SHELLEXECUTEINFO ShExecInfo;
 		ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
 		ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
 		ShExecInfo.hwnd = NULL;
 		ShExecInfo.lpVerb = L"open";
-		ShExecInfo.lpFile = cmddlol;
+		ShExecInfo.lpFile = cmddlol.c_str();
 		ShExecInfo.lpParameters = L"";
 		ShExecInfo.lpDirectory = MainObjects.driveletterW;
 
@@ -317,7 +314,6 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		ShellExecuteExW(&ShExecInfo);
 		WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
 		CloseHandle(ShExecInfo.hProcess);
-		memset(cmddlol, 0, sizeof(cmddlol));
 	}
 
 	if (UnloadSoftRegOnCmd == 1) {
@@ -388,10 +384,8 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	percentageCounter = percentageCounter + 20;
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
-	wchar_t bufferreg[MAX_PATH] = { 0 };
-
-	wcsncpy_s(bufferreg, L"gr7Software\\Grass7\\CurrentVersion\\Updates\\", sizeof(bufferreg));
-	wcsncat_s(bufferreg, gr7::convertchar(lineUpdateID.c_str()), sizeof(bufferreg));
+	std::wstring bufferreg = L"gr7Software\\Grass7\\CurrentVersion\\Updates\\";
+	bufferreg.append(gr7::convertchar(lineUpdateID.c_str()));
 
 	std::wstring UpdateFolder = MainObjects.driveletterW;
 	UpdateFolder.append(L"Windows\\Grass7Update\\");
@@ -410,11 +404,10 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	CopyFileW(BufferFile.c_str(),data,false);
 	HKEY hkey;
 	lineUpdateID.clear();
-	if(RegCreateKeyExW(HKEY_LOCAL_MACHINE, bufferreg, 0, NULL, 0, KEY_WRITE, NULL, &hkey, NULL) == ERROR_SUCCESS) {
+	if(RegCreateKeyExW(HKEY_LOCAL_MACHINE, bufferreg.c_str(), 0, NULL, 0, KEY_WRITE, NULL, &hkey, NULL) == ERROR_SUCCESS) {
 		RegSetValueExW(hkey, L"InfoFile", 0, REG_SZ, (LPBYTE)data, 256);
 		RegCloseKey(hkey);
 	}
-	memset(bufferreg, 0, sizeof(bufferreg));
 
 	if(loadgr7SysHive == 1) {
 		if(RegistryClass::unloadSystemHive() != 0) {
