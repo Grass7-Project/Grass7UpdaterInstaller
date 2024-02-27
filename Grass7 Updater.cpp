@@ -44,12 +44,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
 	MainObjects.hInst = hInstance;
 	ResourceLoader::LoadStrings();
-    if (!SUCCEEDED(gr7::ModifyPrivilege(SE_RESTORE_NAME, TRUE, GetCurrentProcess()))) {
+    if (!SUCCEEDED(Grass7API::Privilege::ModifyPrivilege(SE_RESTORE_NAME, TRUE, GetCurrentProcess()))) {
         MessageBox(NULL, AppResStringsObjects.PrivilageError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
-    if (!SUCCEEDED(gr7::ModifyPrivilege(SE_BACKUP_NAME, TRUE, GetCurrentProcess()))) {
+    if (!SUCCEEDED(Grass7API::Privilege::ModifyPrivilege(SE_BACKUP_NAME, TRUE, GetCurrentProcess()))) {
         MessageBox(NULL, AppResStringsObjects.PrivilageError.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
 		exit(0);
 	}
@@ -65,7 +65,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	std::wstring UpdateFilesFolder = MainObjects.driveletterW;
 	UpdateFilesFolder.append(L"gr7updatefld");
 
-	if(gr7::dirExists(UpdateFilesFolder.c_str()) != 1) {
+	if(Grass7API::FileManagement::dirExists(UpdateFilesFolder.c_str()) != 1) {
 		PROCESS_INFORMATION processInfo;
 		STARTUPINFO info = { sizeof(info) };
 		if ( CreateProcessW(NULL, (LPWSTR)L"\"X:\\sources\\recovery\\recenv.exe\"", NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))

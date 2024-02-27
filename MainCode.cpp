@@ -242,20 +242,20 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	}
 
 	if (linenewUpdateLevel.find("none") == std::string::npos) {
-		LPCTSTR dat1 = gr7::convertchartoLPCWSTR(linenewUpdateLevel.c_str());
+		LPCTSTR dat1 = Grass7API::Convert::convertchartoLPCWSTR(linenewUpdateLevel.c_str());
 		RegSetValueExW(hkey1d, L"UpdateLevel", 0, REG_SZ, (LPBYTE)dat1, 256);
 	}
 
 	if (linenewPatchLevel.find("none") == std::string::npos) {
-		LPCTSTR dat2 = gr7::convertchartoLPCWSTR(linenewPatchLevel.c_str());
+		LPCTSTR dat2 = Grass7API::Convert::convertchartoLPCWSTR(linenewPatchLevel.c_str());
 		RegSetValueExW(hkey1d, L"PatchLevel", 0, REG_SZ, (LPBYTE)dat2, 256);
 	}
 
 	if (linenewBuildString.find("none") == std::string::npos) {
-		LPCTSTR dat3 = gr7::convertchartoLPCWSTR(linenewBuildString.c_str());
+		LPCTSTR dat3 = Grass7API::Convert::convertchartoLPCWSTR(linenewBuildString.c_str());
 		RegSetValueExW(hkey1d, L"BuildString", 0, REG_SZ, (LPBYTE)dat3, 256);
 		std::string newBuildStr = linenewBuildString.substr(0, linenewBuildString.find("."));
-		LPCTSTR dat4 = gr7::convertchartoLPCWSTR(newBuildStr.c_str());
+		LPCTSTR dat4 = Grass7API::Convert::convertchartoLPCWSTR(newBuildStr.c_str());
 		RegSetValueExW(hkey1d, L"CurrentBuild", 0, REG_SZ, (LPBYTE)dat4, 256);
 	}
 
@@ -344,9 +344,9 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 			std::wstring wide_string1 = std::wstring(source1.begin(), source1.end());
 			destination1.clear();
 			source1.clear();
-			std::string bla1 = gr7::WStringToString(wide_string);
+			std::string bla1 = Grass7API::Convert::WStringToString(wide_string);
 			wide_string.clear();
-			std::string bla2 = gr7::WStringToString(wide_string1);
+			std::string bla2 = Grass7API::Convert::WStringToString(wide_string1);
 			wide_string1.clear();
 			bla1.insert(0,"\\\\");
 			bla2.insert(0,"\\\\");
@@ -385,20 +385,20 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	std::wstring bufferreg = L"gr7Software\\Grass7\\CurrentVersion\\Updates\\";
-	bufferreg.append(gr7::convertchar(lineUpdateID.c_str()));
+	bufferreg.append(Grass7API::Convert::convertchar(lineUpdateID.c_str()));
 
 	std::wstring UpdateFolder = MainObjects.driveletterW;
 	UpdateFolder.append(L"Windows\\Grass7Update\\");
 
-	if(gr7::dirExists(UpdateFolder.c_str()) != 1) {
+	if(Grass7API::FileManagement::dirExists(UpdateFolder.c_str()) != 1) {
 		CreateDirectoryW(UpdateFolder.c_str(),NULL);
 	}
-	UpdateFolder.append(gr7::convertchar(lineUpdateID.c_str()));
+	UpdateFolder.append(Grass7API::Convert::convertchar(lineUpdateID.c_str()));
 	UpdateFolder.append(L".txt");
 
 	std::wstring BufferFile = MainObjects.driveletterW;
 	BufferFile.append(L"gr7updatefld\\");
-	BufferFile.append(gr7::convertchar(lineUpdInfoFile.c_str()));
+	BufferFile.append(Grass7API::Convert::convertchar(lineUpdInfoFile.c_str()));
 
 	LPCWSTR data = UpdateFolder.c_str();
 	CopyFileW(BufferFile.c_str(),data,false);
@@ -437,7 +437,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	system32dir.append(L"Windows\\System32");
 
 	SetCurrentDirectoryW(system32dir.c_str());
-	gr7::DeleteDirectory(tempfolder);
+	Grass7API::FileManagement::DeleteDirectory(tempfolder);
 	memset(tempfolder, 0, sizeof(tempfolder));
 	memset(hProgressText, 0, sizeof(hProgressText));
 	Sleep(2000); // Here to make it look like its doing something, program runs way too fast, usually
