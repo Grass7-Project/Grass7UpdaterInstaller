@@ -178,10 +178,12 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -199,8 +201,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Icon.ico" />
-    <None Include="LICENSE" />
-    <None Include="README.md" />
+    <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManagement.h" />
@@ -215,7 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileManagement.cpp" />
-    <ClCompile Include="Grass7 Updater.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="GUIDraw.cpp" />
     <ClCompile Include="MainCode.cpp" />
     <ClCompile Include="Registry.cpp" />

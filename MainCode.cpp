@@ -15,11 +15,10 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		exit(0);
 	}
 	RegistryClass::Init();
-	wchar_t tempfolder[16] = { 0 };
-	wcsncpy_s(tempfolder, MainObjects.driveletterW, sizeof(tempfolder));
-	wcsncat_s(tempfolder, L"gr7updatefld", sizeof(tempfolder));
+	std::wstring tempfolder = MainObjects.driveletterW;
+	tempfolder.append(L"gr7updatefld");
 	int percentageCounter = 0;
-	SetCurrentDirectoryW(tempfolder);
+	SetCurrentDirectoryW(tempfolder.c_str());
 	percentageCounter = percentageCounter + 10;
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
@@ -231,7 +230,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	HKEY hkey1d;
 
-	LONG lResult1 = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"gr7Software\\Grass7\\CurrentVersion", 0, KEY_WRITE, &hkey1d);
+	LONG lResult1 = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"gr7Software\\Grass7\\CurrentVersion", 0, KEY_WRITE, &hkey1d);
 	if (lResult1 != ERROR_SUCCESS)
 	{
 		MessageBoxW(NULL, AppResStringsObjects.FailToOpenRegistryKey.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
@@ -301,7 +300,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		ShExecInfo.lpVerb = L"open";
 		ShExecInfo.lpFile = cmddlol.c_str();
 		ShExecInfo.lpParameters = L"";
-		ShExecInfo.lpDirectory = MainObjects.driveletterW;
+		ShExecInfo.lpDirectory = MainObjects.driveletterW.c_str();
 
 		if (showCmd == 1) {
 			ShExecInfo.nShow = SW_SHOW;
@@ -325,15 +324,13 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	char *dr1;
 	std::string line;
-	char updatefilecnf[33] = { 0 };
+	std::string updatefilecnf = MainObjects.driveletter;
+	updatefilecnf.append("gr7updatefld\\UpdateFiles.conf");
 
-	strncpy_s(updatefilecnf, MainObjects.driveletter, sizeof(updatefilecnf));
-	strncat_s(updatefilecnf, "gr7updatefld\\UpdateFiles.conf", sizeof(updatefilecnf));
-	std::ifstream file(updatefilecnf);
-	memset(updatefilecnf, 0, sizeof(updatefilecnf));
+	std::ifstream file(updatefilecnf.c_str());
 	if (file.is_open()) {
 		while (getline(file, line)) {
-			dr1 = _strdup(MainObjects.driveletter);
+			dr1 = _strdup(MainObjects.driveletter.c_str());
 			std::string destination1 = line;
 			std::size_t pos = destination1.find(" - ");
 			if (pos != std::string::npos) {
@@ -437,8 +434,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	system32dir.append(L"Windows\\System32");
 
 	SetCurrentDirectoryW(system32dir.c_str());
-	Grass7API::FileManagement::DeleteDirectory(tempfolder);
-	memset(tempfolder, 0, sizeof(tempfolder));
+	Grass7API::FileManagement::DeleteDirectory(tempfolder.c_str());
 	memset(hProgressText, 0, sizeof(hProgressText));
 	Sleep(2000); // Here to make it look like its doing something, program runs way too fast, usually
 	exit(0);

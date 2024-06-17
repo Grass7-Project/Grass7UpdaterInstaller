@@ -17,53 +17,41 @@ void RegistryClass::Init()
 
 LONG RegistryClass::loadSystemHive()
 {
-	wchar_t *HiveFile = L"Windows\\System32\\config\\SYSTEM";
-	wchar_t lpSysHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpSysHiveFile, MainObjects.driveletterW, sizeof(lpSysHiveFile));
-	wcsncat_s(lpSysHiveFile, HiveFile, sizeof(lpSysHiveFile));
+	std::wstring SysHiveFile = MainObjects.driveletterW;
+	SysHiveFile.append(L"Windows\\System32\\config\\SYSTEM");
 	LONG   hSystemKey;
-	hSystemKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemKey,lpSysHiveFile);
-	memset(lpSysHiveFile, 0, sizeof(lpSysHiveFile));
+	hSystemKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemKey, SysHiveFile.c_str());
 	return hSystemKey;
 }
 
 LONG RegistryClass::loadSoftwareHive()
 {
+	std::wstring SoftwareHiveFile = MainObjects.driveletterW;
 #ifdef _DEBUG
-	wchar_t *HiveFile = L"FF1\\SOFTWARE";
+	SoftwareHiveFile.append(L"FF1\\SOFTWARE");
 #else
-	wchar_t *HiveFile = L"Windows\\System32\\config\\SOFTWARE";
+	SoftwareHiveFile.append(L"Windows\\System32\\config\\SOFTWARE");
 #endif
-	wchar_t lpSoftwareHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpSoftwareHiveFile, MainObjects.driveletterW, sizeof(lpSoftwareHiveFile));
-	wcsncat_s(lpSoftwareHiveFile, HiveFile, sizeof(lpSoftwareHiveFile));
 	LONG   hSoftwareKey;
-	hSoftwareKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSoftwareKey,lpSoftwareHiveFile);
-	memset(lpSoftwareHiveFile, 0, sizeof(lpSoftwareHiveFile));
+	hSoftwareKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSoftwareKey, SoftwareHiveFile.c_str());
 	return hSoftwareKey;
 }
 
 LONG RegistryClass::loadDefaultHive()
 {
-	wchar_t *HiveFile = L"Windows\\System32\\config\\DEFAULT";
-	wchar_t lpDefaultHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpDefaultHiveFile, MainObjects.driveletterW, sizeof(lpDefaultHiveFile));
-	wcsncat_s(lpDefaultHiveFile, HiveFile, sizeof(lpDefaultHiveFile));
+	std::wstring DefaultHiveFile = MainObjects.driveletterW;
+	DefaultHiveFile.append(L"Windows\\System32\\config\\DEFAULT");
 	LONG   hDefaultKey;
-	hDefaultKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpDefaultKey,lpDefaultHiveFile);
-	memset(lpDefaultHiveFile, 0, sizeof(lpDefaultHiveFile));
+	hDefaultKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpDefaultKey, DefaultHiveFile.c_str());
 	return hDefaultKey;
 }
 
 LONG RegistryClass::loadSystemUserHive()
 {
-	wchar_t *HiveFile = L"Windows\\System32\\config\\systemprofile\\ntuser.dat";
-	wchar_t lpSystemUserHiveFile[MAX_PATH] = { 0 };
-	wcsncpy_s(lpSystemUserHiveFile, MainObjects.driveletterW, sizeof(lpSystemUserHiveFile));
-	wcsncat_s(lpSystemUserHiveFile, HiveFile, sizeof(lpSystemUserHiveFile));
+	std::wstring SystemUserHiveFile = MainObjects.driveletterW;
+	SystemUserHiveFile.append(L"Windows\\System32\\config\\systemprofile\\ntuser.dat");
 	LONG   hSystemUserKey;
-	hSystemUserKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemUserKey,lpSystemUserHiveFile);
-	memset(lpSystemUserHiveFile, 0, sizeof(lpSystemUserHiveFile));
+	hSystemUserKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemUserKey, SystemUserHiveFile.c_str());
 	return hSystemUserKey;
 }
 

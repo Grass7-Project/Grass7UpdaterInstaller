@@ -4,8 +4,8 @@
 class GlobalMain {
 public:
 	HINSTANCE hInst;
-	const char *driveletter;
-	const wchar_t *driveletterW;
+	std::string driveletter;
+	std::wstring driveletterW;
 };
 
 // Application Resource Strings
