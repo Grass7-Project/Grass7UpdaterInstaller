@@ -26,59 +26,59 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	// We have to do a diarrhea way of doing this, not proud of this one, there is likely a better way but i was very angry at the time that it didnt work so i went with this.
 	std::wstring UpdateConfigFile = MainObjects.driveletterW;
 	UpdateConfigFile.append(L"gr7updatefld\\Update.conf");
-	std::ifstream ifs(UpdateConfigFile.c_str());
+	std::wifstream ifs(UpdateConfigFile.c_str());
 
-	std::string updateID = "UpdateID=";
-	std::string arch = "arch=";
-	std::string requiredupdate = "requiredupdate=";
-	std::string OScmd = "OScommands=";
-	std::string newUpdateLevel = "newUpdateLevel=";
-	std::string newPatchLevel = "newPatchLevel=";
-	std::string newBuildString = "newBuildString=";
-	std::string UpdInfoFile = "InfoFile=";
-	std::string cmdEnable = "commandsEnabled=";
-	std::string cmdShow = "commandlineShow=";
-	std::string unloadSoftRegOnCmd = "unloadSoftRegOnCmd=";
-	std::string sysreg = "loadSysReg=";
-	std::string defaultreg = "loadDefaultReg=";
-	std::string sysuserreg = "loadSystemUserReg=";
+	std::wstring updateID = L"UpdateID=";
+	std::wstring arch = L"arch=";
+	std::wstring requiredupdate = L"requiredupdate=";
+	std::wstring OScmd = L"OScommands=";
+	std::wstring newUpdateLevel = L"newUpdateLevel=";
+	std::wstring newPatchLevel = L"newPatchLevel=";
+	std::wstring newBuildString = L"newBuildString=";
+	std::wstring UpdInfoFile = L"InfoFile=";
+	std::wstring cmdEnable = L"commandsEnabled=";
+	std::wstring cmdShow = L"commandlineShow=";
+	std::wstring unloadSoftRegOnCmd = L"unloadSoftRegOnCmd=";
+	std::wstring sysreg = L"loadSysReg=";
+	std::wstring defaultreg = L"loadDefaultReg=";
+	std::wstring sysuserreg = L"loadSystemUserReg=";
 
-	std::regex updateids(updateID + "\\b");
-	std::regex archs(arch + "\\b");
-	std::regex requiredupdates(requiredupdate + "\\b");
-	std::regex OScmden(OScmd + "\\b");
-	std::regex newUpdateLevelS(newUpdateLevel + "\\b");
-	std::regex newPatchLevelS(newPatchLevel + "\\b");
-	std::regex newBuildStringS(newBuildString + "\\b");
-	std::regex updinfofile1(UpdInfoFile + "\\b");
-	std::regex cmden(cmdEnable + "\\b");
-	std::regex cmdsh(cmdShow + "\\b");
-	std::regex unloadSoftRegOnCmdEnable(unloadSoftRegOnCmd + "\\b");
-	std::regex sys(sysreg + "\\b");
-	std::regex defaultr(defaultreg + "\\b");
-	std::regex sysuser(sysuserreg + "\\b");
+	std::wregex updateids(updateID + L"\\b");
+	std::wregex archs(arch + L"\\b");
+	std::wregex requiredupdates(requiredupdate + L"\\b");
+	std::wregex OScmden(OScmd + L"\\b");
+	std::wregex newUpdateLevelS(newUpdateLevel + L"\\b");
+	std::wregex newPatchLevelS(newPatchLevel + L"\\b");
+	std::wregex newBuildStringS(newBuildString + L"\\b");
+	std::wregex updinfofile1(UpdInfoFile + L"\\b");
+	std::wregex cmden(cmdEnable + L"\\b");
+	std::wregex cmdsh(cmdShow + L"\\b");
+	std::wregex unloadSoftRegOnCmdEnable(unloadSoftRegOnCmd + L"\\b");
+	std::wregex sys(sysreg + L"\\b");
+	std::wregex defaultr(defaultreg + L"\\b");
+	std::wregex sysuser(sysuserreg + L"\\b");
 
-	std::string lineUpdateID;
-	std::string lineArch;
-	std::string lineRequiredupdate;
-	std::string lineOScommands;
-	std::string linenewUpdateLevel;
-	std::string linenewPatchLevel;
-	std::string linenewBuildString;
-	std::string lineUpdInfoFile;
-	std::string lineCmdEnable;
-	std::string lineCmdShow;
-	std::string lineUnloadRegSoftOnCmd;
-	std::string lineSysReg;
-	std::string lineDefaultReg;
-	std::string lineSystemUserReg;
+	std::wstring lineUpdateID;
+	std::wstring lineArch;
+	std::wstring lineRequiredupdate;
+	std::wstring lineOScommands;
+	std::wstring linenewUpdateLevel;
+	std::wstring linenewPatchLevel;
+	std::wstring linenewBuildString;
+	std::wstring lineUpdInfoFile;
+	std::wstring lineCmdEnable;
+	std::wstring lineCmdShow;
+	std::wstring lineUnloadRegSoftOnCmd;
+	std::wstring lineSysReg;
+	std::wstring lineDefaultReg;
+	std::wstring lineSystemUserReg;
 
 	percentageCounter = percentageCounter + 10;
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	getline(ifs, lineUpdateID);
 	if (regex_search(lineUpdateID, updateids)) {
-		std::size_t pos = lineUpdateID.find("=");
+		std::size_t pos = lineUpdateID.find(L"=");
 		if (pos != std::string::npos)
 		{
 			lineUpdateID = lineUpdateID.substr(pos + 1);
@@ -87,7 +87,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	getline(ifs, lineArch);
 	if (regex_search(lineArch, archs)) {
-		std::size_t pos = lineArch.find("=");
+		std::size_t pos = lineArch.find(L"=");
 		if (pos != std::string::npos)
 		{
 			lineArch = lineArch.substr(pos + 1);
@@ -97,7 +97,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	getline(ifs, lineRequiredupdate);
 	if (regex_search(lineRequiredupdate, requiredupdates)) {
-		std::size_t pos = lineRequiredupdate.find("=");
+		std::size_t pos = lineRequiredupdate.find(L"=");
 		if (pos != std::string::npos)
 		{
 			lineRequiredupdate = lineRequiredupdate.substr(pos + 1);
@@ -108,7 +108,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int enableOScommands = 0;
 	getline(ifs, lineOScommands);
 	if (regex_search(lineOScommands, OScmden)) {
-		if (lineOScommands.find("true") != std::string::npos) {
+		if (lineOScommands.find(L"true") != std::string::npos) {
 			enableOScommands = 1;
 		}
 	}
@@ -116,7 +116,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 
 	getline(ifs, linenewUpdateLevel);
 	if (regex_search(linenewUpdateLevel, newUpdateLevelS)) {
-		std::size_t pos = linenewUpdateLevel.find("=");
+		std::size_t pos = linenewUpdateLevel.find(L"=");
 		if (pos != std::string::npos)
 		{
 			linenewUpdateLevel = linenewUpdateLevel.substr(pos + 1);
@@ -125,7 +125,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	getline(ifs, linenewPatchLevel);
 
 	if (regex_search(linenewPatchLevel, newPatchLevelS)) {
-		std::size_t pos = linenewPatchLevel.find("=");
+		std::size_t pos = linenewPatchLevel.find(L"=");
 		if (pos != std::string::npos)
 		{
 			linenewPatchLevel = linenewPatchLevel.substr(pos + 1);
@@ -134,7 +134,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	getline(ifs, linenewBuildString);
 
 	if (regex_search(linenewBuildString, newBuildStringS)) {
-		std::size_t pos = linenewBuildString.find("=");
+		std::size_t pos = linenewBuildString.find(L"=");
 		if (pos != std::string::npos)
 		{
 			linenewBuildString = linenewBuildString.substr(pos + 1);
@@ -143,7 +143,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	getline(ifs, lineUpdInfoFile);
 
 	if (regex_search(lineUpdInfoFile, updinfofile1)) {
-		std::size_t pos = lineUpdInfoFile.find("=");
+		std::size_t pos = lineUpdInfoFile.find(L"=");
 		if (pos != std::string::npos)
 		{
 			lineUpdInfoFile = lineUpdInfoFile.substr(pos + 1);
@@ -153,7 +153,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int enableCmd = 0;
 	getline(ifs, lineCmdEnable);
 	if (regex_search(lineCmdEnable, cmden)) {
-		if (lineCmdEnable.find("true") != std::string::npos) {
+		if (lineCmdEnable.find(L"true") != std::string::npos) {
 			enableCmd = 1;
 		}
 	}
@@ -162,7 +162,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int showCmd = 0;
 	getline(ifs, lineCmdShow);
 	if (regex_search(lineCmdShow, cmdsh)) {
-		if (lineCmdShow.find("true") != std::string::npos) {
+		if (lineCmdShow.find(L"true") != std::string::npos) {
 			showCmd = 1;
 		}
 	}
@@ -171,7 +171,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int UnloadSoftRegOnCmd = 0;
 	getline(ifs, lineUnloadRegSoftOnCmd);
 	if (regex_search(lineUnloadRegSoftOnCmd, unloadSoftRegOnCmdEnable)) {
-		if (lineUnloadRegSoftOnCmd.find("true") != std::string::npos) {
+		if (lineUnloadRegSoftOnCmd.find(L"true") != std::string::npos) {
 			UnloadSoftRegOnCmd = 1;
 		}
 	}
@@ -180,7 +180,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int loadgr7SysHive = 0;
 	getline(ifs, lineSysReg);
 	if (regex_search(lineSysReg, sys)) {
-		if (lineSysReg.find("true") != std::string::npos) {
+		if (lineSysReg.find(L"true") != std::string::npos) {
 			loadgr7SysHive = 1;
 		}
 	}
@@ -189,7 +189,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int loadgr7DefaultHive = 0;
 	getline(ifs, lineDefaultReg);
 	if (regex_search(lineDefaultReg, defaultr)) {
-		if (lineDefaultReg.find("true") != std::string::npos) {
+		if (lineDefaultReg.find(L"true") != std::string::npos) {
 			loadgr7DefaultHive = 1;
 		}
 	}
@@ -198,7 +198,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	int loadgr7SystemUserHive = 0;
 	getline(ifs, lineSystemUserReg);
 	if (regex_search(lineSystemUserReg, sysuser)) {
-		if (lineSystemUserReg.find("true") != std::string::npos) {
+		if (lineSystemUserReg.find(L"true") != std::string::npos) {
 			loadgr7SystemUserHive = 1;
 		}
 	}
@@ -240,21 +240,21 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		exit(0);
 	}
 
-	if (linenewUpdateLevel.find("none") == std::string::npos) {
-		LPCTSTR dat1 = Grass7API::Convert::convertchartoLPCWSTR(linenewUpdateLevel.c_str());
+	if (linenewUpdateLevel.find(L"none") == std::string::npos) {
+		LPCTSTR dat1 = linenewUpdateLevel.c_str();
 		RegSetValueExW(hkey1d, L"UpdateLevel", 0, REG_SZ, (LPBYTE)dat1, 256);
 	}
 
-	if (linenewPatchLevel.find("none") == std::string::npos) {
-		LPCTSTR dat2 = Grass7API::Convert::convertchartoLPCWSTR(linenewPatchLevel.c_str());
+	if (linenewPatchLevel.find(L"none") == std::string::npos) {
+		LPCTSTR dat2 = linenewPatchLevel.c_str();
 		RegSetValueExW(hkey1d, L"PatchLevel", 0, REG_SZ, (LPBYTE)dat2, 256);
 	}
 
-	if (linenewBuildString.find("none") == std::string::npos) {
-		LPCTSTR dat3 = Grass7API::Convert::convertchartoLPCWSTR(linenewBuildString.c_str());
+	if (linenewBuildString.find(L"none") == std::string::npos) {
+		LPCTSTR dat3 = linenewBuildString.c_str();
 		RegSetValueExW(hkey1d, L"BuildString", 0, REG_SZ, (LPBYTE)dat3, 256);
-		std::string newBuildStr = linenewBuildString.substr(0, linenewBuildString.find("."));
-		LPCTSTR dat4 = Grass7API::Convert::convertchartoLPCWSTR(newBuildStr.c_str());
+		std::wstring newBuildStr = linenewBuildString.substr(0, linenewBuildString.find(L"."));
+		LPCTSTR dat4 = newBuildStr.c_str();
 		RegSetValueExW(hkey1d, L"CurrentBuild", 0, REG_SZ, (LPBYTE)dat4, 256);
 	}
 
@@ -382,7 +382,7 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	GUIDrawClass::updateProgressBar(percentageCounter, hProgressBar, hWnd, hProgressText);
 
 	std::wstring bufferreg = L"gr7Software\\Grass7\\CurrentVersion\\Updates\\";
-	bufferreg.append(Grass7API::Convert::convertchar(lineUpdateID.c_str()));
+	bufferreg.append(lineUpdateID.c_str());
 
 	std::wstring UpdateFolder = MainObjects.driveletterW;
 	UpdateFolder.append(L"Windows\\Grass7Update\\");
@@ -390,12 +390,12 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 	if(Grass7API::FileManagement::dirExists(UpdateFolder.c_str()) != 1) {
 		CreateDirectoryW(UpdateFolder.c_str(),NULL);
 	}
-	UpdateFolder.append(Grass7API::Convert::convertchar(lineUpdateID.c_str()));
+	UpdateFolder.append(lineUpdateID.c_str());
 	UpdateFolder.append(L".txt");
 
 	std::wstring BufferFile = MainObjects.driveletterW;
 	BufferFile.append(L"gr7updatefld\\");
-	BufferFile.append(Grass7API::Convert::convertchar(lineUpdInfoFile.c_str()));
+	BufferFile.append(lineUpdInfoFile.c_str());
 
 	LPCWSTR data = UpdateFolder.c_str();
 	CopyFileW(BufferFile.c_str(),data,false);
