@@ -322,45 +322,28 @@ int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText
 		}
 	}
 
-	char *dr1;
-	std::string line;
-	std::string updatefilecnf = MainObjects.driveletter;
-	updatefilecnf.append("gr7updatefld\\UpdateFiles.conf");
+	wchar_t *dr1;
+	std::wstring line;
+	std::wstring updatefilecnf = MainObjects.driveletterW;
+	updatefilecnf.append(L"gr7updatefld\\UpdateFiles.conf");
 
-	std::ifstream file(updatefilecnf.c_str());
+	std::wifstream file(updatefilecnf.c_str());
 	if (file.is_open()) {
 		while (getline(file, line)) {
-			dr1 = _strdup(MainObjects.driveletter.c_str());
-			std::string destination1 = line;
-			std::size_t pos = destination1.find(" - ");
-			if (pos != std::string::npos) {
+			dr1 = _wcsdup(MainObjects.driveletterW.c_str());
+			std::wstring destination1 = line;
+			std::size_t pos = destination1.find(L" - ");
+			if (pos != std::wstring::npos) {
 				destination1 = destination1.substr(pos+3);
 			}
-			std::string source1 = line.substr(0, line.find(" - "));
-			std::wstring wide_string = std::wstring(destination1.begin(), destination1.end());
-			std::wstring wide_string1 = std::wstring(source1.begin(), source1.end());
-			destination1.clear();
-			source1.clear();
-			std::string bla1 = Grass7API::Convert::WStringToString(wide_string);
-			wide_string.clear();
-			std::string bla2 = Grass7API::Convert::WStringToString(wide_string1);
-			wide_string1.clear();
-			bla1.insert(0,"\\\\");
-			bla2.insert(0,"\\\\");
-			dr1[strlen(dr1) - 1] = 0;
-			bla1.insert(0,dr1);
-			bla2.insert(0,dr1);
-			std::wstring dst1 = std::wstring(bla1.begin(), bla1.end());
-			std::wstring src1 = std::wstring(bla2.begin(), bla2.end());
-			bla1.clear();
-			bla2.clear();
+			std::wstring source1 = line.substr(0, line.find(L" - "));
+			destination1.insert(0,L"\\\\");
+			source1.insert(0,L"\\\\");
+			dr1[wcslen(dr1) - 1] = 0;
+			destination1.insert(0,dr1);
+			source1.insert(0,dr1);
 
-			const wchar_t* destination = dst1.c_str();
-			const wchar_t* source = src1.c_str();
-
-			CopyFileW(source,destination,false);
-			dst1.clear();
-			src1.clear();
+			CopyFileW(source1.c_str(), destination1.c_str(),false);
 			memset(dr1, 0, sizeof(dr1));
 			if(percentageCounter != 40) {
 				percentageCounter = percentageCounter + 1;
