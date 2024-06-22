@@ -10,10 +10,6 @@
 int MainCodeClass::mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText)
 {
 	Sleep(2000);
-	if(MainObjects.driveletter == "") {
-		MessageBoxW(NULL, AppResStringsObjects.NotInstalled.c_str(), AppResStringsObjects.OSName.c_str(), MB_OK | MB_ICONERROR);
-		exit(0);
-	}
 	RegistryClass::Init();
 	std::wstring tempfolder = MainObjects.driveletterW;
 	tempfolder.append(L"gr7updatefld");
