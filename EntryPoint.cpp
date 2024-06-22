@@ -10,6 +10,7 @@
 #include "Global.h"
 #include <sdkddkver.h>
 #include <vector>
+#include <thread>
 
 GlobalMain MainObjects;
 GlobalAppResStrings AppResStringsObjects;
@@ -144,7 +145,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	::SendMessageW(hSmoothProgressCtrl, PBM_SETPOS, (WPARAM)(INT)0, 0);
 	::ShowWindow(hWnd, SW_SHOWDEFAULT);
 	::UpdateWindow(hWnd);
-	MainCodeClass::mainCode(hSmoothProgressCtrl, hWnd, wcs);
+	std::thread MainCodeThread(MainCodeClass::mainCode, std::ref(hSmoothProgressCtrl), std::ref(hWnd), std::ref(wcs));
+	MainCodeThread.detach();
 
 	MSG msg;
 	while (::GetMessageW(&msg, hWnd, 0, 0) > 0)
