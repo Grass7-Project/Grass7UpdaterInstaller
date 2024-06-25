@@ -1,7 +1,4 @@
-// The actual updater code
-
 #include "stdafx.h"
-#include "Global.h"
 #include "Registry.h"
 #include "FileManagement.h"
 #include "MainCode.h"

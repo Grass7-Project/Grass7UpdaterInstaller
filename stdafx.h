@@ -12,6 +12,9 @@
 #include "resource.h"
 #include <Windows.h>
 #include <commctrl.h>
+#include <sdkddkver.h>
+#include <vector>
+#include <thread>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
@@ -19,6 +22,7 @@
 #include <fstream>
 #include <regex>
 #include <Gr7API.h>
+#include "Global.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN

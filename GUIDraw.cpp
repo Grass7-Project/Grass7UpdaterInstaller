@@ -1,8 +1,5 @@
-// GUI Drawing functions
-
 #include "stdafx.h"
 #include "GUIDraw.h"
-#include "Global.h"
 
 void GUIDrawClass::OnSomeActionToRefreshValues(HWND hWnd, wchar_t *wcs)
 {

@@ -1,8 +1,5 @@
-// Functions related to file-management
-
 #include "stdafx.h"
 #include "FileManagement.h"
-#include "Global.h"
 #include <io.h>
 
 const char *FileManagementClass::Getgr7DriveLetter()

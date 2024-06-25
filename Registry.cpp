@@ -1,9 +1,6 @@
-// Registry related functions
-
 #include "stdafx.h"
 #include "Registry.h"
 #include "FileManagement.h"
-#include "Global.h"
 
 RegistryClass RegistryObjects;
 

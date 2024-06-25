@@ -3,6 +3,7 @@
 // Main Class
 class GlobalMain {
 public:
+	HWND hWndMainWindow;
 	HINSTANCE hInst;
 	std::string driveletter;
 	std::wstring driveletterW;
