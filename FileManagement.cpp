@@ -1,278 +1,61 @@
 #include "stdafx.h"
 #include "FileManagement.h"
-#include <io.h>
+#include "GUIDraw.h"
 
-const char *FileManagementClass::Getgr7DriveLetter()
+void FileManagement::Getgr7DriveLetter(std::wstring &DriveLetter)
 {
-	const char *driveletter;
 	std::fstream fileStream;
-	// I had no other way of doing this in my way so we have to do this terrible solution, but it works for now.
-	// TODO: rewrite this peice of code to be better than this ugly mess.
-	fileStream.open(L"C:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "C:\\";
-	}
-	fileStream.open(L"D:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "D:\\";
-	}
-	fileStream.open(L"E:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "E:\\";
-	}
-	fileStream.open(L"F:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "F:\\";
-	}
-	fileStream.open(L"G:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "G:\\";
-	}
-	fileStream.open(L"H:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "H:\\";
-	}
-	fileStream.open(L"I:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "I:\\";
-	}
-	fileStream.open(L"J:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "J:\\";
-	}
-	fileStream.open(L"K:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "K:\\";
-	}
-	fileStream.open(L"L:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "L:\\";
-	}
-	fileStream.open(L"M:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "M:\\";
-	}
-	fileStream.open(L"N:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "N:\\";
-	}
-	fileStream.open(L"O:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "O:\\";
-	}
-	fileStream.open(L"P:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "P:\\";
-	}
-	fileStream.open(L"Q:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "Q:\\";
-	}
-	fileStream.open(L"R:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "R:\\";
-	}
-	fileStream.open(L"S:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "S:\\";
-	}
-	fileStream.open(L"T:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "T:\\";
-	}
-	fileStream.open(L"U:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "U:\\";
-	}
-	fileStream.open(L"V:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "V:\\";
-	}
-	fileStream.open(L"W:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "W:\\";
-	}
-	fileStream.open(L"Y:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "Y:\\";
-	}
-	fileStream.open(L"Z:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	} else {
-		driveletter = "Z:\\";
-	}
-	fileStream.close();
 
-	return driveletter;
+	std::wstring driveList(MAX_PATH, 0);
+	driveList.resize((size_t)GetLogicalDriveStringsW((int)driveList.size(), &driveList[0]));
+	if (!driveList.empty())
+	{
+		std::wstring drive = driveList;
+		while (!drive.empty())
+		{
+			std::wstring checkpath = &drive[0];
+			checkpath.append(L"Windows\\System32\\identifier");
+			fileStream.open(checkpath);
+			if (!fileStream.fail()) {
+				DriveLetter = &drive[0];
+				drive.clear();
+			}
+
+			fileStream.close();
+			std::wstring string1 = &drive[0];
+			drive.erase(0, string1.size() + 1);
+		}
+	}
 }
 
-const wchar_t *FileManagementClass::Getgr7DriveLetterW()
+BOOL FileManagement::ProcessFileList(std::wstring &FileList, int &percentageCounter)
 {
-	wchar_t *driveletter;
-	std::fstream fileStream;
-	// I had no other way of doing this in my way so we have to do this terrible solution, but it works for now.
-	// TODO: rewrite this peice of code to be better than this ugly mess.
-	fileStream.open(L"C:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"C:\\";
-	}
-	fileStream.open(L"D:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"D:\\";
-	}
-	fileStream.open(L"E:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"E:\\";
-	}
-	fileStream.open(L"F:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"F:\\";
-	}
-	fileStream.open(L"G:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"G:\\";
-	}
-	fileStream.open(L"H:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"H:\\";
-	}
-	fileStream.open(L"I:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"I:\\";
-	}
-	fileStream.open(L"J:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"J:\\";
-	}
-	fileStream.open(L"K:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"K:\\";
-	}
-	fileStream.open(L"L:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"L:\\";
-	}
-	fileStream.open(L"M:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"M:\\";
-	}
-	fileStream.open(L"N:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"N:\\";
-	}
-	fileStream.open(L"O:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"O:\\";
-	}
-	fileStream.open(L"P:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"P:\\";
-	}
-	fileStream.open(L"Q:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"Q:\\";
-	}
-	fileStream.open(L"R:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"R:\\";
-	}
-	fileStream.open(L"S:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"S:\\";
-	}
-	fileStream.open(L"T:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"T:\\";
-	}
-	fileStream.open(L"U:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"U:\\";
-	}
-	fileStream.open(L"V:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"V:\\";
-	}
-	fileStream.open(L"W:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"W:\\";
-	}
-	fileStream.open(L"Y:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"Y:\\";
-	}
-	fileStream.open(L"Z:\\Windows\\System32\\identifier");
-	if (fileStream.fail()) {
-	}
-	else {
-		driveletter = L"Z:\\";
-	}
-	fileStream.close();
+	std::wifstream file(FileList);
 
-	return driveletter;
+	if (!file.is_open()) {
+		return 1;
+	}
+
+	std::wstring line;
+	while (std::getline(file, line))
+	{
+		std::wstring destination = line;
+		std::size_t pos = destination.find(L" - ");
+		if (pos != std::wstring::npos) {
+			destination = destination.substr(pos + 3);
+		}
+		std::wstring source = line.substr(0, line.find(L" - "));
+		destination.insert(0, L"\\");
+		source.insert(0, L"\\");
+		destination.insert(0, MainObjects.driveletter);
+		source.insert(0, MainObjects.driveletter);
+
+		CopyFileW(source.c_str(), destination.c_str(), false);
+		if (percentageCounter != 40) {
+			percentageCounter = percentageCounter + 1;
+			RedrawWindow(MainObjects.hWndMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+		}
+	}
+	file.close();
+	return 0;
 }

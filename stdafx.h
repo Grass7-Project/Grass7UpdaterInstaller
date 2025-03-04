@@ -21,7 +21,12 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <map>
 #include <Gr7API.h>
+
+#include <io.h>
+#include <sstream>
+
 #include "Global.h"
 
 #ifndef WIN32_LEAN_AND_MEAN

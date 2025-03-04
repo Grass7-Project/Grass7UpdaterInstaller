@@ -1,5 +1,7 @@
-class FileManagementClass {
+#pragma once
+
+class FileManagement {
 public:
-	static const char *Getgr7DriveLetter();
-	static const wchar_t *Getgr7DriveLetterW();
+	static void Getgr7DriveLetter(std::wstring &DriveLetter);
+	static BOOL ProcessFileList(std::wstring &FileList, int &percentageCounter);
 };

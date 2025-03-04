@@ -1,35 +1,15 @@
 #include "stdafx.h"
 #include "GUIDraw.h"
 
-void GUIDrawClass::OnSomeActionToRefreshValues(HWND hWnd, wchar_t *wcs)
+void GUIDrawUpdateWindow(int percentageCounter, HWND &hProgressBar, HWND &hWnd, HDC &hdc, std::wstring &hProgressText)
 {
-    HDC hdc = ::GetDC(hWnd);
-    DrawValues(hdc, wcs);
-    ReleaseDC(hWnd,hdc);
-}
+	RECT rchWnd;
+	std::wstring percentage(MAX_PATH, 0);
+	std::wstring ProgressText;
 
-void GUIDrawClass::DrawValues(HDC hdc, wchar_t *wcs)
-{
-	HFONT hFont,hTmp;
-	hFont=CreateFontW(18,0,0,0,FW_LIGHT,0,0,0,0,0,0,2,0,L"Segoe UI");
-	hTmp=(HFONT)SelectObject(hdc,hFont);
-	size_t size = wcslen(wcs);
-	int convertsize = static_cast<int>(size);
-    TextOutW(hdc, 10, 10, wcs, convertsize);
-}
-
-void GUIDrawClass::updateProgressBar(int percentageCounter, HWND hProgressBar, HWND hWnd,wchar_t *hProgressText)
-{
-	TCHAR percantage[5] = { 0 };
-	TCHAR ProgressText[24] = { 0 };
-	
-	memset(hProgressText, 0, sizeof(hProgressText));
-	swprintf_s(percantage, L"%d", percentageCounter);
-	wcsncat_s(percantage, L"%", 5);
-	::SendMessageW(hProgressBar, PBM_SETPOS, (WPARAM)(INT)percentageCounter, 0);
-	wcscpy_s(ProgressText, hProgressText);
-	wcsncat_s(ProgressText, AppResStringsObjects.Installing.c_str(), 24);
-	wcsncat_s(ProgressText, percantage, 256);
-	OnSomeActionToRefreshValues(hWnd, ProgressText);
-	::UpdateWindow(hWnd);
+	percentage.resize((size_t)swprintf_s(&percentage[0], percentage.size(), L"%d", percentageCounter));
+	ProgressText.append(hProgressText + &percentage[0] + L"%");
+	SendMessageW(hProgressBar, PBM_SETPOS, (WPARAM)(INT)percentageCounter, 0);
+	GetClientRect(hWnd, &rchWnd);
+	Grass7API::Paint::PaintText(hdc, 10, 10, L"Segoe UI", RGB(0, 0, 0), ProgressText.c_str(), 18, 2, OPAQUE, FW_LIGHT, &rchWnd);
 }

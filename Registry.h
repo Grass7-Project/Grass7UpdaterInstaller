@@ -1,4 +1,6 @@
-class RegistryClass {
+#pragma once
+
+class Registry {
 public:
 	static void Init();
 	static LONG loadSystemHive();

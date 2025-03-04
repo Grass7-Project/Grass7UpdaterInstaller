@@ -1,4 +1,10 @@
-class MainCodeClass {
+#pragma once
+
+class MainCode {
 public:
-	static int mainCode(HWND hProgressBar, HWND hWnd, wchar_t *hProgressText);
+	static void mainCode();
+private:
+	std::wstring UpdateConfigFile;
+	std::wstring UpdateIDRegistry;
+	std::wstring RequiredUpdateRegistry;
 };

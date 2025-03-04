@@ -2,9 +2,9 @@
 #include "Registry.h"
 #include "FileManagement.h"
 
-RegistryClass RegistryObjects;
+Registry RegistryObjects;
 
-void RegistryClass::Init()
+void Registry::Init()
 {
 	RegistryObjects.lpSystemKey = L"gr7System";
 	RegistryObjects.lpSoftwareKey = L"gr7Software";
@@ -12,18 +12,18 @@ void RegistryClass::Init()
 	RegistryObjects.lpSystemUserKey = L"gr7SystemUser";
 }
 
-LONG RegistryClass::loadSystemHive()
+LONG Registry::loadSystemHive()
 {
-	std::wstring SysHiveFile = MainObjects.driveletterW;
+	std::wstring SysHiveFile = MainObjects.driveletter;
 	SysHiveFile.append(L"Windows\\System32\\config\\SYSTEM");
 	LONG   hSystemKey;
 	hSystemKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemKey, SysHiveFile.c_str());
 	return hSystemKey;
 }
 
-LONG RegistryClass::loadSoftwareHive()
+LONG Registry::loadSoftwareHive()
 {
-	std::wstring SoftwareHiveFile = MainObjects.driveletterW;
+	std::wstring SoftwareHiveFile = MainObjects.driveletter;
 #ifdef _DEBUG
 	SoftwareHiveFile.append(L"FF1\\SOFTWARE");
 #else
@@ -34,46 +34,46 @@ LONG RegistryClass::loadSoftwareHive()
 	return hSoftwareKey;
 }
 
-LONG RegistryClass::loadDefaultHive()
+LONG Registry::loadDefaultHive()
 {
-	std::wstring DefaultHiveFile = MainObjects.driveletterW;
+	std::wstring DefaultHiveFile = MainObjects.driveletter;
 	DefaultHiveFile.append(L"Windows\\System32\\config\\DEFAULT");
 	LONG   hDefaultKey;
 	hDefaultKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpDefaultKey, DefaultHiveFile.c_str());
 	return hDefaultKey;
 }
 
-LONG RegistryClass::loadSystemUserHive()
+LONG Registry::loadSystemUserHive()
 {
-	std::wstring SystemUserHiveFile = MainObjects.driveletterW;
+	std::wstring SystemUserHiveFile = MainObjects.driveletter;
 	SystemUserHiveFile.append(L"Windows\\System32\\config\\systemprofile\\ntuser.dat");
 	LONG   hSystemUserKey;
 	hSystemUserKey = RegLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemUserKey, SystemUserHiveFile.c_str());
 	return hSystemUserKey;
 }
 
-bool RegistryClass::unloadSystemHive()
+bool Registry::unloadSystemHive()
 {
 	bool err;
 	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemKey) != 0);
 	return err;
 }
 
-bool RegistryClass::unloadSoftwareHive()
+bool Registry::unloadSoftwareHive()
 {
 	bool err;
 	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSoftwareKey) != 0);
 	return err;
 }
 
-bool RegistryClass::unloadDefaultHive()
+bool Registry::unloadDefaultHive()
 {
 	bool err;
 	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpDefaultKey) != 0);
 	return err;
 }
 
-bool RegistryClass::unloadSystemUserHive()
+bool Registry::unloadSystemUserHive()
 {
 	bool err;
 	err = (RegUnLoadKeyW(HKEY_LOCAL_MACHINE, RegistryObjects.lpSystemUserKey) != 0);
